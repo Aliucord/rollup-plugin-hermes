@@ -23,7 +23,7 @@ export function hermes(options?: { hermesPath: string }): Plugin {
             if (!bundleFile) return;
 
             const map: SourceMap = (bundleFile as any).map;
-            const tmpmap = `${path}/${map.file}.hermestmp`;
+            const tmpmap = `${path}/${map?.file}.hermestmp`;
             if (map) {
                 writeFileSync(tmpmap, map.toString());
             }
@@ -47,7 +47,10 @@ export function hermes(options?: { hermesPath: string }): Plugin {
             }
 
             spawnSync(hermesc, args, { stdio: "inherit" });
-            unlinkSync(tmpmap);
+
+            if (map) {
+                unlinkSync(tmpmap);
+            }
         }
     };
 }
