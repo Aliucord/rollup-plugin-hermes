@@ -1,0 +1,37 @@
+{
+  "name": "rollup-plugin-hermes",
+  "version": "0.11.0",
+  "description": "Rollup plugin to compile code using hermesc",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "tsc -w",
+    "prepublishOnly": "pnpm build"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aliucord/rollup-plugin-hermes.git"
+  },
+  "keywords": [
+    "rollup-plugin"
+  ],
+  "author": "Juby210",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aliucord/rollup-plugin-hermes/issues"
+  },
+  "homepage": "https://github.com/Aliucord/rollup-plugin-hermes#readme",
+  "dependencies": {
+    "hermes-engine": "0.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.25",
+    "rollup": "^2.70.2",
+    "typescript": "^4.6.3"
+  }
+}
