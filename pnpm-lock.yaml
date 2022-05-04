@@ -1,13 +1,9 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@types/node': ^17.0.25
-  hermes-engine: 0.11.0
   rollup: ^2.70.2
   typescript: ^4.6.3
-
-dependencies:
-  hermes-engine: 0.11.0
 
 devDependencies:
   '@types/node': 17.0.25
@@ -27,10 +23,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /hermes-engine/0.11.0:
-    resolution: {integrity: sha512-7aMUlZja2IyLYAcZ69NBnwJAR5ZOYlSllj0oMpx08a8HzxHOys0eKCzfphrf6D0vX1JGO1QQvVsQKe6TkYherw==}
-    dev: false
 
   /rollup/2.70.2:
     resolution: {integrity: sha512-EitogNZnfku65I1DD5Mxe8JYRUCy0hkK5X84IlDtUs+O6JRMpRciXTzyCUuX11b5L5pvjH+OmFXiQ3XjabcXgg==}

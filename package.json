@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-hermes",
-  "version": "0.11.1",
+  "version": "1.0.0",
   "description": "Rollup plugin to compile code using hermesc",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,8 +26,8 @@
     "url": "https://github.com/Aliucord/rollup-plugin-hermes/issues"
   },
   "homepage": "https://github.com/Aliucord/rollup-plugin-hermes#readme",
-  "dependencies": {
-    "hermes-engine": "0.11.0"
+  "peerDependencies": {
+    "hermes-engine": "0.x"
   },
   "devDependencies": {
     "@types/node": "^17.0.25",
