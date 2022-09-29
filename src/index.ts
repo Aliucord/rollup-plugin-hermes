@@ -1,5 +1,5 @@
 import { OutputBundle, OutputChunk, OutputOptions, Plugin, SourceMap } from "rollup";
-import { readFile, stat, unlink, writeFile } from "fs/promises";
+import { access, readFile, unlink, writeFile } from "fs/promises";
 import { spawn } from "child_process";
 import { join } from "path";
 import { tmpdir } from "os";
@@ -16,7 +16,7 @@ export function hermes(options?: { hermesPath?: string }): Plugin {
         async generateBundle(options: OutputOptions, bundle: OutputBundle) {
             let hermesPathExists;
             try {
-                await stat(hermesPath);
+                await access(hermesPath);
                 hermesPathExists = true;
             } catch {
                 hermesPathExists = false;
@@ -79,6 +79,7 @@ export function hermes(options?: { hermesPath?: string }): Plugin {
             if (map) {
                 await unlink(tmpmap);
             }
+            await unlink(tempPath);
         }
     };
 }
