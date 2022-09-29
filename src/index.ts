@@ -1,7 +1,9 @@
-import { Plugin, SourceMap } from "rollup";
-import { existsSync, unlinkSync, writeFileSync } from "fs";
-import { spawnSync } from "child_process";
+import { OutputBundle, OutputChunk, OutputOptions, Plugin, SourceMap } from "rollup";
+import { access, readFile, unlink, writeFile } from "fs/promises";
+import { spawn } from "child_process";
 import { join } from "path";
+import { tmpdir } from "os";
+import { randomBytes } from "crypto";
 
 export function hermes(options?: { hermesPath?: string }): Plugin {
     options ??= {};
@@ -11,8 +13,16 @@ export function hermes(options?: { hermesPath?: string }): Plugin {
     return {
         name: "hermes",
 
-        writeBundle(options, bundle) {
-            if (hermesPath === undefined || !existsSync(hermesPath)) {
+        async generateBundle(options: OutputOptions, bundle: OutputBundle) {
+            let hermesPathExists;
+            try {
+                await access(hermesPath);
+                hermesPathExists = true;
+            } catch {
+                hermesPathExists = false;
+            }
+
+            if (hermesPath === undefined || !hermesPathExists) {
                 this.warn("hermes-engine not found, skipping hermes plugin");
                 return;
             }
@@ -20,15 +30,14 @@ export function hermes(options?: { hermesPath?: string }): Plugin {
             const outFile = options.file?.split("/");
             if (!outFile) return;
             const file = outFile.pop()!;
-            const path = outFile.join("/");
 
-            const bundleFile = bundle[file];
+            const bundleFile = bundle[file] as OutputChunk|undefined;
             if (!bundleFile) return;
 
-            const map: SourceMap = (bundleFile as any).map;
-            const tmpmap = `${path}/${map?.file}.hermestmp`;
+            const map: SourceMap = bundleFile.map!;
+            const tmpmap = join(tmpdir(), `${randomBytes(8).readUInt32LE(0)}.hermestmp`);
             if (map) {
-                writeFileSync(tmpmap, map.toString());
+                await writeFile(tmpmap, map.toString());
             }
 
             let hermesc = `${hermesPath}/%OS%-bin/hermesc`;
@@ -43,17 +52,34 @@ export function hermes(options?: { hermesPath?: string }): Plugin {
                     hermesc = hermesc.replace("%OS%", "linux64");
             }
 
-            const args = ["-Wno-direct-eval", "-Wno-undefined-variable", "--emit-binary", "--out", `${path}/${file}.bundle`, options.file!];
+            const tempPath = join(tmpdir(), `${randomBytes(8).readUInt32LE(0)}.bundle`)
+
+            const args = ["-Wno-direct-eval", "-Wno-undefined-variable", "--emit-binary", "--out", tempPath];
             if (map) {
                 args.push("--source-map");
                 args.push(tmpmap);
             }
 
-            spawnSync(hermesc, args, { stdio: "inherit" });
+            await new Promise(
+                r => {
+                    const process = spawn(hermesc, args, { stdio: "pipe" })
+                    process.on("exit", r)
+                    
+                    process.stdin!.write(bundleFile.code);
+                    process.stdin!.end();
+                }
+            );
+
+            this.emitFile({
+                type: "asset",
+                fileName: `${file}.bundle`,
+                source: await readFile(tempPath)
+            })
 
             if (map) {
-                unlinkSync(tmpmap);
+                await unlink(tmpmap);
             }
+            await unlink(tempPath);
         }
     };
 }
