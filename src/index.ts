@@ -7,7 +7,7 @@ import { randomBytes } from "crypto";
 
 export function hermes(options?: { hermesPath?: string }): Plugin {
     options ??= {};
-    options.hermesPath ??= join(__dirname, "..", "..", "hermes-engine"); // node_modules/rollup-plugin-hermes/dist/../../hermes-engine
+    options.hermesPath ??= join(__dirname, "..", "..", "@aliucord/hermes"); // node_modules/rollup-plugin-hermes/dist/../../@aliucord/hermes
     const { hermesPath } = options;
 
     return {
@@ -23,7 +23,7 @@ export function hermes(options?: { hermesPath?: string }): Plugin {
             }
 
             if (hermesPath === undefined || !hermesPathExists) {
-                this.warn("hermes-engine not found, skipping hermes plugin");
+                this.warn("hermesc not found, skipping hermes plugin");
                 return;
             }
 
