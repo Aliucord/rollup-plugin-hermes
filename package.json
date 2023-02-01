@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/Aliucord/rollup-plugin-hermes#readme",
   "peerDependencies": {
-    "hermes-engine": "0.x"
+    "@aliucord/hermesc": "^0.70.6-aliucord-1"
   },
   "devDependencies": {
     "@types/node": "^18.7.23",
