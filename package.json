@@ -25,8 +25,8 @@
     "url": "https://github.com/Aliucord/rollup-plugin-hermes/issues"
   },
   "homepage": "https://github.com/Aliucord/rollup-plugin-hermes#readme",
-  "dependencies": {
-    "@aliucord/hermesc": "0.x"
+  "peerDependencies": {
+    "@aliucord/hermesc": "*"
   },
   "devDependencies": {
     "@types/node": "^18.7.23",
