@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-hermes",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Rollup plugin to compile code using hermesc",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
